@@ -8,7 +8,7 @@ const bodyParser = require("body-parser");
 const { lookup } = require("geoip-lite");
 const nodeFetch = require("node-fetch");
 const nodemailer = require("nodemailer");
-
+const RedisClient = require("./services/RedisClient.js");
 const PORT = process.env.PORT || 3001;
 const isProduction = process.env.NODE_ENV === "production";
 dotenv.config();
@@ -53,15 +53,43 @@ function authenticateToken(req, res, callback) {
 app.get("/api/todayQuote", (req, res) => {
   authenticateToken(req, res, (res) => {
     var quoteUrl = process.env.TODAY_QUOTE_URL;
+    var cd = new Date();
+    var quoteKey = [
+      "todayQuote",
+      cd.getDate(),
+      cd.getMonth() + 1,
+      cd.getFullYear(),
+    ].join("-");
 
-    nodeFetch(quoteUrl)
-      .then((response) => response.json())
-      .then((data) => {
-        res.json({
-          quote: data[0].q,
-          author: data[0].a,
-        });
-      });
+    RedisClient.client.get(quoteKey, (err, reply) => {
+      if (err) {
+        // key does not exist, or connection failed
+        // TODO: refactor redis client so that it auto-connects
+        console.log(err);
+      } else {
+        if (reply == null) {
+          nodeFetch(quoteUrl)
+            .then((response) => response.json())
+            .then((data) => {
+              RedisClient.client.set(
+                quoteKey,
+                JSON.stringify({
+                  quote: data[0].q,
+                  author: data[0].a,
+                })
+              );
+
+              res.json({
+                quote: data[0].q,
+                author: data[0].a,
+              });
+            });
+        } else {
+          // key exists
+          res.json(JSON.parse(reply));
+        }
+      }
+    });
   });
 });
 
@@ -71,38 +99,61 @@ app.get("/api/weather", (req, res) => {
     if (isProduction == false) {
       ip = process.env.LOCAL_IP;
     }
-    var location = lookup(ip);
 
-    if (location) {
-      var lat = location.ll[0];
-      var lon = location.ll[1];
-      var city = location.city;
+    var cd = new Date();
+    var weatherKey = [
+      ip,
+      cd.getDate(),
+      cd.getMonth() + 1,
+      cd.getFullYear(),
+      cd.getHours(),
+    ].join("-");
 
-      var weather_url = process.env.WEATHER_URL.replace("{lat}", lat).replace(
-        "{lon}",
-        lon
-      );
-      // get weather
-      var weather = nodeFetch(weather_url)
-        .then((response) => response.json())
-        .then((data) => {
-          var result = {
-            city: city,
-            temp: data.main.temp,
-            desc:
-              data.weather[0].description.charAt(0).toUpperCase() +
-              data.weather[0].description.slice(1),
-            icon:
-              "http://openweathermap.org/img/wn/" +
-              data.weather[0].icon +
-              "@2x.png",
-          };
+    RedisClient.client.get(weatherKey, (err, reply) => {
+      if (err) {
+        // key does not exist, or connection failed
+        // TODO: refactor redis client so that it auto-connects
+        console.log(err);
+      } else {
+        if (reply == null) {
+          var location = lookup(ip);
+          if (location) {
+            var lat = location.ll[0];
+            var lon = location.ll[1];
+            var city = location.city;
 
-          res.json(result);
-        });
-    } else {
-      res.json({ error: "unable to get location" });
-    }
+            var weather_url = process.env.WEATHER_URL.replace(
+              "{lat}",
+              lat
+            ).replace("{lon}", lon);
+            // get weather
+            var weather = nodeFetch(weather_url)
+              .then((response) => response.json())
+              .then((data) => {
+                var result = {
+                  city: city,
+                  temp: data.main.temp,
+                  desc:
+                    data.weather[0].description.charAt(0).toUpperCase() +
+                    data.weather[0].description.slice(1),
+                  icon:
+                    "http://openweathermap.org/img/wn/" +
+                    data.weather[0].icon +
+                    "@2x.png",
+                };
+
+                RedisClient.client.set(weatherKey, JSON.stringify(result));
+
+                res.json(result);
+              });
+          } else {
+            res.json({ error: "unable to get location" });
+          }
+        } else {
+          res.json(JSON.parse(reply));
+        }
+      }
+    });
   });
 });
 
