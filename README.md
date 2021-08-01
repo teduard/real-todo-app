@@ -18,6 +18,9 @@ Name | Description
 Postgresql | Data Storage
 React with Material-UI| Front end application
 Heroku | Used for deployment with CD
+Redis | Used as cache for widgets
+Docker | Used for running needed servers as containers
+RedisLabs.com | Free-tier account for the redis-server.
 UserFront | Used for user management through JWT
 api.openweathermap.org | Used to fetch current weather based on geo-location
 zenquotes.io | Used to fetch Today's Quote
@@ -39,7 +42,9 @@ The application needs to have both the `server` and `client` applications up and
 - in /client: npm install && npm run build
 - visit application at localhost://3001
 
-A valid UserFront account, a valid email account and a Postgres server are needed. Also, at this point, in order to have all the available functionalities the .env file needs to be properly filled in:
+In order to run a Redis instance we either need to setup a free-tier option in a RedisLabs.com account(used for deployment on Heroku also), or have Docker locally installed, with the `docker/redis/run_redis.sh -start` command executed.
+
+Also, a valid UserFront account, a valid email account and a Postgres server are needed. And at this point, in order to have all the available functionalities the .env file needs to be properly filled in:
 Field | Description
 ------|------------
 USERFRONT_PUBLIC_KEY | The public key from the UserFront account
@@ -56,6 +61,9 @@ MAIL_PASSWORD | The email password
 MAIL_SMTP_SERVER | The smtp server of the email service
 MAIL_SMTP_PORT | Smpt port. for gmail should work with 465
 MAIL_RECEIVER_EMAIL | Email address
+REDIS_PWD | Password used for Redis server.
+REDIS_HOST | Hostname used for Redis installation.
+REDIS_PORT | Port used for redis. Localhost default is 6379.
 
 
 
