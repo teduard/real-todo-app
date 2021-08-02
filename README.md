@@ -72,6 +72,7 @@ Todos:
 - use react-intl as i18n solution
 - refactor express app
 - implement unit tests
+- add Category/DueDate for todo items and implement the description field
 
 ### Extra Screenshots
 <img src="https://github.com/teduard/real-todo-app/blob/main/client/src/assets/homepage.png" height="350px"/>
