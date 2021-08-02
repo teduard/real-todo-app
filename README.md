@@ -1,8 +1,6 @@
 ## Real Todo App
 
-
-<img src="https://github.com/teduard/real-todo-app/blob/main/client/src/assets/homepage.png" height="300px"/> |
-<img src="https://github.com/teduard/real-todo-app/blob/main/deployed_app.png" height="300px"/>
+<img src="https://github.com/teduard/real-todo-app/blob/main/deployed_app.png" height="350px"/>
 
 This repository contains details on how to build a Todo List/Dashboard application and deploy it on Heroku.
 
@@ -70,6 +68,13 @@ Todos:
 - add prisma.io ORM
 - refactor all endpoints to GraphQL
 - implement cron job for fetching RSS feed hourly
+- use Redux for state management
+- use react-intl as i18n solution
 - refactor express app
 - implement unit tests
+
+### Extra Screenshots
+<img src="https://github.com/teduard/real-todo-app/blob/main/client/src/assets/homepage.png" height="350px"/>
+<img src="https://github.com/teduard/real-todo-app/blob/main/bbc_rss.png" height="350px"/>
+
 
