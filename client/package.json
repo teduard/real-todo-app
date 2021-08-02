@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@apollo/client": "^3.4.1",
     "@material-ui/core": "^4.12.2",
     "@material-ui/icons": "^4.11.2",
     "@testing-library/jest-dom": "^5.14.1",
@@ -14,6 +15,7 @@
     "@types/react-dom": "^17.0.9",
     "@userfront/react": "^0.2.17",
     "chart.js": "^3.4.1",
+    "graphql": "^15.5.1",
     "moment": "^2.29.1",
     "npm-watch": "^0.10.0",
     "react": "^17.0.2",

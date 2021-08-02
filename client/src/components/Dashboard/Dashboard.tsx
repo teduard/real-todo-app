@@ -15,6 +15,7 @@ import TodoListSummary from "../TodoList/TodoListSummary";
 import Settings from "../Settings/Settings";
 import QuoteOfDay from "../Widget/QuoteOfDay/QuoteOfDay";
 import WeatherWidget from "../Widget/WeatherWidget/WeatherWidget";
+import LatestNews from "../Widget/LatestNews/LatestNews";
 
 function Dashboard() {
   function renderCore(location: string) {
@@ -46,6 +47,9 @@ function Dashboard() {
             </Grid>
             <Grid item xs={12} md={3}>
               <WeatherWidget />
+            </Grid>
+            <Grid item xs={12}>
+              <LatestNews />
             </Grid>
           </Grid>
           <Settings />

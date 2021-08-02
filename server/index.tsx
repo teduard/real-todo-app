@@ -11,6 +11,7 @@ const nodemailer = require("nodemailer");
 const RedisClient = require("./services/RedisClient.js");
 const PORT = process.env.PORT || 3001;
 const isProduction = process.env.NODE_ENV === "production";
+const GraphqlRoutes = require("./services/graphql.tsx");
 dotenv.config();
 const app = express();
 const statusMonitor = require("express-status-monitor")();
@@ -332,6 +333,8 @@ app.post("/items/updateStatus", (req, res) => {
 });
 
 app.use(express.static(path.resolve(__dirname, "../client/build")));
+
+app.use("/graphql", GraphqlRoutes.GraphqlRoutes())
 
 // All other GET requests not handled before will return our React app
 app.get("*", (req, res) => {
