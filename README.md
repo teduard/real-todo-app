@@ -19,6 +19,7 @@ Postgresql | Data Storage
 React with Material-UI| Front end application
 Heroku | Used for deployment with CD
 Redis | Used as cache for widgets
+GraphQL | Simple usage for fetching BBC RSS feed.
 Docker | Used for running needed servers as containers
 RedisLabs.com | Free-tier account for the redis-server.
 UserFront | Used for user management through JWT
@@ -65,5 +66,10 @@ REDIS_PWD | Password used for Redis server.
 REDIS_HOST | Hostname used for Redis installation.
 REDIS_PORT | Port used for redis. Localhost default is 6379.
 
-
+Todos:
+- add prisma.io ORM
+- refactor all endpoints to GraphQL
+- implement cron job for fetching RSS feed hourly
+- refactor express app
+- implement unit tests
 
