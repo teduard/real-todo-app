@@ -1,4 +1,4 @@
-## Real Todo App
+## Real Todo App 
 
 <img src="https://github.com/teduard/real-todo-app/blob/main/deployed_app.png" height="350px"/>
 
